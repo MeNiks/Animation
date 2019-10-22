@@ -2,6 +2,8 @@ package com.niks.animationdemo
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
@@ -17,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        printViews()
 
         startAnimation.setOnClickListener {
             //printCoordinates(fir)
@@ -39,11 +42,12 @@ class MainActivity : AppCompatActivity() {
 
             startAnimation(firstView, getYDelta(clickedCount, 0, firstView))
             startAnimation(secondView, (getYDelta(clickedCount + 1, 1, secondView)))
-            printCoordinates(secondView)
             startAnimation(thirdView, (getYDelta(clickedCount + 2, 2, thirdView)))
             startAnimation(fourthView, (getYDelta(clickedCount + 3, 3, fourthView)))
 
             clickedCount++
+
+            printViews()
 
         }
     }
@@ -71,4 +75,16 @@ class MainActivity : AppCompatActivity() {
     private fun printCoordinates(view: View) {
         Log.d("yep", "X = ${view.x} Y = ${view.y}")
     }
+
+    private fun printViews() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            printCoordinates(firstView)
+            printCoordinates(secondView)
+            printCoordinates(thirdView)
+            printCoordinates(fourthView)
+            Log.d("yep", "=============")
+        }, 2000)
+    }
+
+
 }
