@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="no_internet">Please check internet connection.</string>
+    <string name="unexpected">Unexpected Error has Received!</string>
+    <string name="unexpected_code">Unexpected Error has Received! %d</string>
+</resources>
