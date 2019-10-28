@@ -17,6 +17,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.Dimension
 import androidx.fragment.app.Fragment
 import androidx.paging.PagedList
 import app.niks.base.recyclerview.datasourcefactory.ListPositionDataSource
@@ -182,12 +183,11 @@ fun Context.myToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
 
-fun Context.convertDpToPixel(dp: Int): Float {
-    val metrics = resources.displayMetrics
-    return (dp * (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT))
+fun Context.convertDpToPixel(@Dimension(unit = Dimension.DP) dp: Float): Float {
+    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)
 }
 
-fun Context.convertPixelToDp(sp: Float): Float {
+fun Context.convertSpToPixel(@Dimension(unit = Dimension.SP) sp: Float): Float {
     return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, resources.displayMetrics)
 }
 

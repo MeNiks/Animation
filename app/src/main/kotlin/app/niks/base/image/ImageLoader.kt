@@ -18,7 +18,7 @@ open class ImageLoader {
             .into(imageView)
     }
 
-    fun loadImage(imageView: ImageView, url: String, cornerRadius: Int) {
+    fun loadImage(imageView: ImageView, url: String, cornerRadius: Float) {
         var finalUrl = url
         if (!url.contains("http", true)) {
             finalUrl = "https:$url"

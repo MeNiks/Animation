@@ -10,7 +10,7 @@ class ViewBindingUtils {
         @JvmStatic
         @BindingAdapter("imageUrl", "cornerRadius")
         fun loadImage(imageView: ImageView, imageUrl: String, cornerRadius: Int) {
-            Creator.imageLoader.loadImage(imageView, imageUrl, cornerRadius)
+            Creator.imageLoader.loadImage(imageView, imageUrl, cornerRadius.toFloat())
         }
     }
 }
