@@ -34,6 +34,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.json.JSONException
 import org.json.JSONObject
+import timber.log.Timber
 
 // Rx Java
 fun <T> Observable<T>.applyOnIOMainSchedulers(): Observable<T> {
@@ -63,6 +64,9 @@ fun <T> T.asResult(): Result<T> {
 
 fun <T> Throwable.asErrorResult(): Result<T> {
     return Result.Error(throwable = this)
+}
+fun handleThrowable(throwable: Throwable) {
+    Timber.e(throwable)
 }
 
 private const val PAGE_SIZE = 10

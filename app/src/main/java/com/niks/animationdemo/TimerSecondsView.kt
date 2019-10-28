@@ -1,55 +1,75 @@
 package com.niks.animationdemo
 
 import android.animation.ObjectAnimator
-import android.os.Bundle
+import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.AttributeSet
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.animation.doOnEnd
-import androidx.core.animation.doOnStart
 import app.niks.base.extension.convertDpToPixel
+import app.niks.base.extension.handleThrowable
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
+import kotlinx.android.synthetic.main.seconds_view.view.*
+import java.util.concurrent.TimeUnit
 
+class TimerSecondsView : ConstraintLayout {
+    constructor(context: Context?) : super(context)
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
-class MainActivity : AppCompatActivity() {
-    //First position is 0
-    var gotoPosition = 0
-    val NUMBER_OF_VIEWS = 5
+    init {
+        LayoutInflater.from(context).inflate(R.layout.seconds_view, this, true)
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    private var compositeDisposable: CompositeDisposable? = null
 
-        printViews()
+    private var gotoPosition = 0
+    private val NUMBER_OF_VIEWS = 5
 
-        startAnimation.setOnClickListener {
+    fun startTime() {
+        compositeDisposable = CompositeDisposable()
+        compositeDisposable?.addAll(
+            Observable
+                .interval(1, TimeUnit.SECONDS)
+                .subscribe({
+                    incrementSeconds()
+                }, ::handleThrowable)
 
-            gotoPosition++
-            gotoPosition %= NUMBER_OF_VIEWS
+        )
 
-            printCoordinates(firstView)
-            startAnimation(firstView, gotoPosition, 0)
+    }
 
-            printCoordinates(secondView)
-            startAnimation(secondView, gotoPosition, 1)
+    private fun incrementSeconds() {
+        gotoPosition++
+        gotoPosition %= NUMBER_OF_VIEWS
 
-            printCoordinates(thirdView)
-            startAnimation(thirdView, gotoPosition, 2)
+        printCoordinates(firstView)
+        startAnimation(firstView, gotoPosition, 0)
 
-            printCoordinates(fourthView)
-            startAnimation(fourthView, gotoPosition, 3)
+        printCoordinates(secondView)
+        startAnimation(secondView, gotoPosition, 1)
 
-            printCoordinates(fifthView)
-            startAnimation(fifthView, gotoPosition, 4)
+        printCoordinates(thirdView)
+        startAnimation(thirdView, gotoPosition, 2)
 
-            Log.d("yep", "=================================================================")
+        printCoordinates(fourthView)
+        startAnimation(fourthView, gotoPosition, 3)
 
-            //printViews()
+        printCoordinates(fifthView)
+        startAnimation(fifthView, gotoPosition, 4)
 
-        }
+        Log.d("yep", "=================================================================")
+
     }
 
     private fun getYDelta(goToPosition: Int, position: Int): Float {
@@ -60,7 +80,7 @@ class MainActivity : AppCompatActivity() {
         //to get negative values for postion>0 and position values for position 0
         modValue -= position
         modValue -= 1
-        val deltaY = modValue * convertDpToPixel(50F)
+        val deltaY = modValue * context.convertDpToPixel(50F)
         logInfo("currentViewNextPosition : $currentViewNextPosition  Mod Value : $modValue DeltaY : $deltaY")
         return deltaY
     }
@@ -110,6 +130,5 @@ class MainActivity : AppCompatActivity() {
             Log.d("yep", "=================================================================")
         }, 2000)
     }
-
 
 }
