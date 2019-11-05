@@ -9,7 +9,6 @@ import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.preference.PreferenceManager
-import android.util.DisplayMetrics
 import android.util.Patterns
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -65,6 +64,7 @@ fun <T> T.asResult(): Result<T> {
 fun <T> Throwable.asErrorResult(): Result<T> {
     return Result.Error(throwable = this)
 }
+
 fun handleThrowable(throwable: Throwable) {
     Timber.e(throwable)
 }
@@ -80,7 +80,8 @@ fun <T> List<T>.toPagedList(): PagedList<T> {
         PagedList.Config.Builder()
             .setPageSize(PAGE_SIZE)
             .setEnablePlaceholders(ENABLE_PLACEHOLDERS)
-            .build())
+            .build()
+    )
         .setNotifyExecutor(UiThreadExecutor())
         .setFetchExecutor(BackgroundThreadExecutor())
         .build()
@@ -263,4 +264,8 @@ fun View?.setVisibleOrInvisible(isVisible: Boolean) {
         View.VISIBLE
     else
         View.INVISIBLE
+}
+
+fun logInfo(logTag: String, message: String) {
+    Timber.i("$logTag %s", message)
 }

@@ -2,58 +2,80 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="140dp"
     android:orientation="vertical">
 
-    <View
+    <TextView
         android:id="@+id/firstView"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="#F44336"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="21sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="1" />
 
-    <View
+
+    <TextView
         android:id="@+id/secondView"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:background="#009688"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="21sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/firstView" />
+        app:layout_constraintTop_toBottomOf="@+id/firstView"
+        tools:text="1" />
 
-    <View
+    <TextView
         android:id="@+id/thirdView"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:background="#3F51B5"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="21sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/secondView" />
+        app:layout_constraintTop_toBottomOf="@+id/secondView"
+        tools:text="1" />
 
-    <View
+    <TextView
         android:id="@+id/fourthView"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:background="#FFEB3B"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="21sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/thirdView" />
+        app:layout_constraintTop_toBottomOf="@+id/thirdView"
+        tools:text="1" />
 
 
-    <View
+    <TextView
         android:id="@+id/fifthView"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:background="#673AB7"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="21sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fourthView" />
+        app:layout_constraintTop_toBottomOf="@+id/fourthView"
+        tools:text="1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
