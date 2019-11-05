@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
         Fabric.with(this, Crashlytics())
 
-        timerSecondsView.setRemainingTime(59)
+        timerSecondsView.setRemainingTime(15)
 
         startAnimation.setOnClickListener {
             timerSecondsView.startTime()

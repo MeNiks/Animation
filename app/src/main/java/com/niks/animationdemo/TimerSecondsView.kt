@@ -36,10 +36,10 @@ class TimerSecondsView : ConstraintLayout {
     private val START_VIEW_POSITION = -1
 
 
-    fun setRemainingTime(time: Long) {
-        this.remainingSeconds = time
-        firstView.text = "${time - 1}"
-        secondView.text = "$time"
+    fun setRemainingTime(remainingSeconds: Long) {
+        this.remainingSeconds = remainingSeconds
+        secondView.text = "${remainingSeconds - 1}"
+        thirdView.text = "$remainingSeconds"
     }
 
     fun startTime() {
@@ -53,6 +53,7 @@ class TimerSecondsView : ConstraintLayout {
                 .interval(1, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .map { interval -> remainingSeconds - interval }
+                .map { seconds -> seconds - 2 }
                 .filter { seconds -> seconds >= 0 }
                 .subscribe({ seconds ->
                     logInfo(TAG, "seconds : $seconds")
@@ -70,31 +71,31 @@ class TimerSecondsView : ConstraintLayout {
         yDelta %= NUMBER_OF_VIEWS
 
         printCoordinates(firstView)
-        if (getGoingToPosition(START_VIEW_POSITION) == START_VIEW_POSITION)
+        if (getGoingToPosition(START_VIEW_POSITION) == 0)
             firstView.text = "${seconds}"
         startAnimation(firstView, START_VIEW_POSITION)
 
 
         printCoordinates(secondView)
-        if (getGoingToPosition(START_VIEW_POSITION + 1) == START_VIEW_POSITION)
+        if (getGoingToPosition(START_VIEW_POSITION + 1) == 0)
             secondView.text = "${seconds}"
         startAnimation(secondView, START_VIEW_POSITION + 1)
 
 
         printCoordinates(thirdView)
-        if (getGoingToPosition(START_VIEW_POSITION + 2) == START_VIEW_POSITION)
+        if (getGoingToPosition(START_VIEW_POSITION + 2) == 0)
             thirdView.text = "${seconds}"
         startAnimation(thirdView, START_VIEW_POSITION + 2)
 
 
         printCoordinates(fourthView)
-        if (getGoingToPosition(START_VIEW_POSITION + 3) == START_VIEW_POSITION)
+        if (getGoingToPosition(START_VIEW_POSITION + 3) == 0)
             fourthView.text = "${seconds}"
         startAnimation(fourthView, START_VIEW_POSITION + 3)
 
 
         printCoordinates(fifthView)
-        if (getGoingToPosition(START_VIEW_POSITION + 4) == START_VIEW_POSITION)
+        if (getGoingToPosition(START_VIEW_POSITION + 4) == 0)
             fifthView.text = "${seconds}"
         startAnimation(fifthView, START_VIEW_POSITION + 4)
 
