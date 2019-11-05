@@ -38,8 +38,13 @@ class TimerSecondsView : ConstraintLayout {
 
     fun setRemainingTime(remainingSeconds: Long) {
         this.remainingSeconds = remainingSeconds
-        secondView.text = "${remainingSeconds - 1}"
-        thirdView.text = "$remainingSeconds"
+        secondView.text = "${getTime(remainingSeconds - 1)}"
+        thirdView.text = "${getTime(remainingSeconds)}"
+        fourthView.text = "${getTime(remainingSeconds + 1)}"
+    }
+
+    private fun getTime(remainingSeconds: Long): Long {
+        return remainingSeconds % 60
     }
 
     fun startTime() {
@@ -72,31 +77,31 @@ class TimerSecondsView : ConstraintLayout {
 
         printCoordinates(firstView)
         if (getGoingToPosition(START_VIEW_POSITION) == 0)
-            firstView.text = "${seconds}"
+            firstView.text = "${getTime(seconds)}"
         startAnimation(firstView, START_VIEW_POSITION)
 
 
         printCoordinates(secondView)
         if (getGoingToPosition(START_VIEW_POSITION + 1) == 0)
-            secondView.text = "${seconds}"
+            secondView.text = "${getTime(seconds)}"
         startAnimation(secondView, START_VIEW_POSITION + 1)
 
 
         printCoordinates(thirdView)
         if (getGoingToPosition(START_VIEW_POSITION + 2) == 0)
-            thirdView.text = "${seconds}"
+            thirdView.text = "${getTime(seconds)}"
         startAnimation(thirdView, START_VIEW_POSITION + 2)
 
 
         printCoordinates(fourthView)
         if (getGoingToPosition(START_VIEW_POSITION + 3) == 0)
-            fourthView.text = "${seconds}"
+            fourthView.text = "${getTime(seconds)}"
         startAnimation(fourthView, START_VIEW_POSITION + 3)
 
 
         printCoordinates(fifthView)
         if (getGoingToPosition(START_VIEW_POSITION + 4) == 0)
-            fifthView.text = "${seconds}"
+            fifthView.text = "${getTime(seconds)}"
         startAnimation(fifthView, START_VIEW_POSITION + 4)
 
         logInfo(TAG, "=================================================================")
