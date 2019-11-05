@@ -33,7 +33,7 @@ class TimerSecondsView : ConstraintLayout {
 
     private var yDelta = 0
     private var remainingSeconds = 0L
-    private val START_VIEW_POSITION = 0
+    private val START_VIEW_POSITION = -1
 
 
     fun setRemainingTime(time: Long) {
@@ -132,9 +132,9 @@ class TimerSecondsView : ConstraintLayout {
 
     private fun getGoingToPosition(viewPosition: Int): Int {
         var goingToPosition = viewPosition + yDelta
-        if (goingToPosition >= NUMBER_OF_VIEWS) {
-            goingToPosition %= NUMBER_OF_VIEWS
-            goingToPosition -= START_VIEW_POSITION
+        if (goingToPosition >= (NUMBER_OF_VIEWS + START_VIEW_POSITION)) {
+            goingToPosition %= (NUMBER_OF_VIEWS + START_VIEW_POSITION)
+            goingToPosition += START_VIEW_POSITION
         }
         return goingToPosition
     }
