@@ -31,8 +31,9 @@ class TimerSecondsView : ConstraintLayout {
 
     private var compositeDisposable: CompositeDisposable? = null
 
-    private var gotoPosition = 0
+    private var yDelta = 0
     private var remainingSeconds = 0L
+    private val START_VIEW_POSITION = 0
 
 
     fun setRemainingTime(time: Long) {
@@ -43,17 +44,18 @@ class TimerSecondsView : ConstraintLayout {
 
     fun startTime() {
         logInfo(TAG, "startTime")
+        if (compositeDisposable?.size() ?: 0 > 0) {
+            return
+        }
         compositeDisposable = CompositeDisposable()
         compositeDisposable?.addAll(
             Observable
                 .interval(1, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
-                // (remainingSeconds + 1) so that it will srart with the exact seconds
-                // Ex - For 59 sec interval will start from 1 to seconds will be (59 +1) - 1 = 59
-                .map { interval -> (remainingSeconds + 1) - interval }
+                .map { interval -> remainingSeconds - interval }
                 .filter { seconds -> seconds >= 0 }
                 .subscribe({ seconds ->
-                    logInfo(TAG, "time : $seconds")
+                    logInfo(TAG, "seconds : $seconds")
                     incrementSeconds(seconds)
                 }, ::handleThrowable)
         )
@@ -64,69 +66,63 @@ class TimerSecondsView : ConstraintLayout {
     }
 
     private fun incrementSeconds(seconds: Long) {
-        gotoPosition++
-        gotoPosition %= NUMBER_OF_VIEWS
+        yDelta++
+        yDelta %= NUMBER_OF_VIEWS
 
         printCoordinates(firstView)
-        if (getFinalViewPosition(gotoPosition, -1) == -1)
+        if (getGoingToPosition(START_VIEW_POSITION) == START_VIEW_POSITION)
             firstView.text = "${seconds}"
-        startAnimation(firstView, gotoPosition, 0)
+        startAnimation(firstView, START_VIEW_POSITION)
 
 
         printCoordinates(secondView)
-        if (getFinalViewPosition(gotoPosition, 0) == -1)
+        if (getGoingToPosition(START_VIEW_POSITION + 1) == START_VIEW_POSITION)
             secondView.text = "${seconds}"
-        startAnimation(secondView, gotoPosition, 1)
+        startAnimation(secondView, START_VIEW_POSITION + 1)
 
 
         printCoordinates(thirdView)
-        if (getFinalViewPosition(gotoPosition, 1) == -1)
+        if (getGoingToPosition(START_VIEW_POSITION + 2) == START_VIEW_POSITION)
             thirdView.text = "${seconds}"
-        startAnimation(thirdView, gotoPosition, 2)
+        startAnimation(thirdView, START_VIEW_POSITION + 2)
 
 
         printCoordinates(fourthView)
-        if (getFinalViewPosition(gotoPosition, 2) == -1)
+        if (getGoingToPosition(START_VIEW_POSITION + 3) == START_VIEW_POSITION)
             fourthView.text = "${seconds}"
-        startAnimation(fourthView, gotoPosition, 3)
+        startAnimation(fourthView, START_VIEW_POSITION + 3)
 
 
         printCoordinates(fifthView)
-        if (getFinalViewPosition(gotoPosition, 3) == -1)
+        if (getGoingToPosition(START_VIEW_POSITION + 4) == START_VIEW_POSITION)
             fifthView.text = "${seconds}"
-        startAnimation(fifthView, gotoPosition, 4)
+        startAnimation(fifthView, START_VIEW_POSITION + 4)
 
         logInfo(TAG, "=================================================================")
 
     }
 
-    private fun getYDelta(goToPosition: Int, position: Int): Float {
-        val currentViewNextPosition = goToPosition + position
-        //To move the view to 0th position
-        var modValue = currentViewNextPosition % NUMBER_OF_VIEWS
-        logInfo(TAG, "Mod Value : $modValue")
-        //to get negative values for postion>0 and position values for position 0
-        modValue -= position
-        modValue -= 1
-        //To get coordinates above 0th element
-        val deltaY = modValue * context.convertDpToPixel(50F)
-        logInfo(TAG, "currentViewNextPosition : $currentViewNextPosition  Mod Value : $modValue DeltaY : $deltaY")
-        return deltaY
+    private fun getYDelta(goingToPosition: Int, viewPosition: Int): Float {
+        return (goingToPosition - viewPosition) * context.convertDpToPixel(50F)
     }
 
 
-    private fun startAnimation(view: View, gotoPosition: Int, viewPosition: Int) {
-        var finalViewPosition = viewPosition + gotoPosition
-        finalViewPosition %= NUMBER_OF_VIEWS
-        val isViewAtEnd = finalViewPosition == 0
+    private fun startAnimation(view: View, viewPosition: Int) {
+        val goingToPosition = getGoingToPosition(viewPosition)
 
-        val yTranslation = getYDelta(gotoPosition, viewPosition)
+
+        val goingToStartPosition = goingToPosition == START_VIEW_POSITION
+
+        val yTranslation = getYDelta(goingToPosition, viewPosition)
+
+        logInfo(TAG, "viewPosition : $viewPosition yDelta : $yDelta goingToPosition : $goingToPosition yTranslation : $yTranslation                              ")
+
         val objectAnimator = ObjectAnimator.ofFloat(view, "translationY", yTranslation)
         objectAnimator.interpolator = AccelerateDecelerateInterpolator()
         objectAnimator.duration = 1000
         objectAnimator.start()
 
-        if (isViewAtEnd) {
+        if (goingToStartPosition) {
             view.visibility = View.INVISIBLE
             objectAnimator.doOnEnd {
                 view.visibility = View.VISIBLE
@@ -134,12 +130,13 @@ class TimerSecondsView : ConstraintLayout {
         }
     }
 
-    private fun getFinalViewPosition(gotoPosition: Int, viewPosition: Int): Int {
-        var finalViewPosition = viewPosition + gotoPosition
-        if (finalViewPosition == 4) {
-            finalViewPosition = -1
+    private fun getGoingToPosition(viewPosition: Int): Int {
+        var goingToPosition = viewPosition + yDelta
+        if (goingToPosition >= NUMBER_OF_VIEWS) {
+            goingToPosition %= NUMBER_OF_VIEWS
+            goingToPosition -= START_VIEW_POSITION
         }
-        return finalViewPosition
+        return goingToPosition
     }
 
     private fun printCoordinates(view: View) {
@@ -152,6 +149,7 @@ class TimerSecondsView : ConstraintLayout {
             printCoordinates(secondView)
             printCoordinates(thirdView)
             printCoordinates(fourthView)
+            printCoordinates(fifthView)
             logInfo(TAG, "=============")
         }, 1000)
     }
